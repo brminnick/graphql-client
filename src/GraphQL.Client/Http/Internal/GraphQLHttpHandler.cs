@@ -23,7 +23,7 @@ namespace GraphQL.Client.Http.Internal {
 			if (options.HttpMessageHandler == null) { throw new ArgumentNullException(nameof(options.HttpMessageHandler)); }
 			if (options.MediaType == null) { throw new ArgumentNullException(nameof(options.MediaType)); }
 
-			if (IsDefaultHandler(Options.HttpMessageHandler as HttpClientHandler))
+			if (IsDefaultHandler(this.Options.HttpMessageHandler as HttpClientHandler))
 				this.HttpClient = new HttpClient();
 			else
 				this.HttpClient = new HttpClient(this.Options.HttpMessageHandler);
