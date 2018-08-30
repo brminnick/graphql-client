@@ -23,7 +23,10 @@ namespace GraphQL.Client.Http.Internal {
 			if (options.HttpMessageHandler == null) { throw new ArgumentNullException(nameof(options.HttpMessageHandler)); }
 			if (options.MediaType == null) { throw new ArgumentNullException(nameof(options.MediaType)); }
 
-			this.HttpClient = new HttpClient(this.Options.HttpMessageHandler);
+			if (IsDefaultHandler(Options.HttpMessageHandler as HttpClientHandler))
+				this.HttpClient = new HttpClient();
+			else
+				this.HttpClient = new HttpClient(this.Options.HttpMessageHandler);
 		}
 
 		public GraphQLHttpHandler(GraphQLHttpClientOptions options, HttpClient httpClient) {
@@ -101,6 +104,8 @@ namespace GraphQL.Client.Http.Internal {
 			this.Options.HttpMessageHandler.Dispose();
 		}
 
+		bool IsDefaultHandler(HttpClientHandler handler) =>
+			JsonConvert.SerializeObject(handler).Equals(JsonConvert.SerializeObject(new HttpClientHandler()));
 	}
 
 }
